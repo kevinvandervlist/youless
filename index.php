@@ -1,5 +1,5 @@
 <?php
-
+	include "settings.inc.php";
 	include "database.class.php";
 	include "session.inc.php";
 	

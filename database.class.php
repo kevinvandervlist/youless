@@ -10,7 +10,7 @@ class Database {
     public function __construct() {
 
         try {
-            $this->_db = new PDO('mysql:host=localhost;dbname=youless', 'user', 'password', array( 
+            $this->_db = new PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME, DB_USER, DB_PASS, array( 
       			PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true
    			));
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

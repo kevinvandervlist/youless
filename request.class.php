@@ -6,7 +6,7 @@ class Request {
 	private $format;
     
 	public function __construct() {
-		$this->source = 'http://192.168.1.125/';
+		$this->source = 'http://'.YL_ADDRESS.'/';
 		$this->format = '?f=j'; // JSON
 	}    
 

@@ -1,4 +1,5 @@
 <?php
+include "settings.inc.php";
 include "request.class.php";	
 include "database.class.php";
 
