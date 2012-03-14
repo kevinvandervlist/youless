@@ -160,11 +160,15 @@ elseif(isset($_GET['a']) && $_GET['a'] == 'saveSettings')
 	foreach($_POST as $k => $v)
 	{
 		$$k = $v;
+		if($k != 'password' || $k != 'confirmpassword')
+		{
+			$settingsData[$k] = $v;
+		}
 	}
-	
+
 	if($password != "" && $confirmpassword != "" && $password == $confirmpassword)
 	{
-		echo "Change password!";
+		$db->updateLogin(sha1($password));
 	}
 }
 else
