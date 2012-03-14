@@ -35,7 +35,7 @@
 					<tr>
 						<td colspan="2">
 							<input type="hidden" name="login" value="1" />
-							<input id="loginSubmit" type="submit" value="inloggen"/>
+							<input id="loginSubmit" type="submit" value="Inloggen"/>
 						</td>
 					</tr>
 				</table>

@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 class Database {
 
@@ -41,7 +41,23 @@ class Database {
             $this->printErrorMessage($e->getMessage());
         }
     }
-    
+
+    /**
+     * Update login 
+     */
+     public function updateLogin($password) {
+        try {
+            $sth = $this->_db->prepare("UPDATE users SET password= ? WHERE username='admin'");
+
+            $sth->bindValue(1, $password, PDO::PARAM_STR);
+            $sth->execute();
+
+			return $sth->rowCount();
+        } catch (PDOException $e) {
+            $this->printErrorMessage($e->getMessage());
+        }
+    }
+        
     /**
      * Get settings 
      */

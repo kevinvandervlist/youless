@@ -153,21 +153,6 @@ function createChart(target, date){
 						}]
 					});
 		
-			
-			// Chart compare code
-			//console.log(data);
-			/*
-			var series = {
-				name : 'Watt',
-				data :  data,
-				pointStart: Date.UTC(2012, 2, 5),
-            	pointInterval: 60 * 1000,
-				tooltip: {
-					valueDecimals: 0
-				}
-			}; 
-			history.addSeries(series);
-			*/
 				},
     			cache: false
 			});
@@ -190,7 +175,9 @@ $(document).ready(function() {
 			data: $('#settingsOverlay form').serialize(),
 			success: function( data ) {
 				console.log( data );
-				$('#settingsOverlay').slideUp();
+				$('#settingsOverlay').slideUp('fast', function(){
+					$('#settingsOverlay input[type=password]').val('');
+				});
 			}
 		});			
 		return false;
