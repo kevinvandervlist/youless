@@ -63,10 +63,11 @@ class Database {
      */
     public function updateSettings($key, $value) {
         try {
-			$sth = $this->_db->prepare("UPDATE settings SET `value` = ? WHERE `key` = ?");
+			//$sth = $this->_db->prepare("UPDATE settings SET `value` = ? WHERE `key` = ?");
+			$sth = $this->_db->prepare("INSERT INTO settings (`value`,`key`) VALUES (:value, :key) ON DUPLICATE KEY UPDATE `value`=:value, `key`=:key");
 			
-			$sth->bindValue(1, $value, PDO::PARAM_STR);
-			$sth->bindValue(2, $key, PDO::PARAM_STR);			
+			$sth->bindValue(':value', $value, PDO::PARAM_STR);
+			$sth->bindValue(':key', $key, PDO::PARAM_STR);			
             $sth->execute();
             
 			return $sth->rowCount();
