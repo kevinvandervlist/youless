@@ -57,6 +57,23 @@ class Database {
             $this->printErrorMessage($e->getMessage());
         }
     }
+    
+	/**
+     * Update settings
+     */
+    public function updateSettings($key, $value) {
+        try {
+			$sth = $this->_db->prepare("UPDATE settings SET `value` = ? WHERE `key` = ?");
+			
+			$sth->bindValue(1, $value, PDO::PARAM_STR);
+			$sth->bindValue(2, $key, PDO::PARAM_STR);			
+            $sth->execute();
+            
+			return $sth->rowCount();
+       } catch (PDOException $e) {
+            $this->printErrorMessage($e->getMessage());
+        }
+    }    
         
     /**
      * Get settings 

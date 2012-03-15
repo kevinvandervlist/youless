@@ -160,9 +160,9 @@ elseif(isset($_GET['a']) && $_GET['a'] == 'saveSettings')
 	foreach($_POST as $k => $v)
 	{
 		$$k = $v;
-		if($k != 'password' || $k != 'confirmpassword')
+		if($k != 'password' && $k != 'confirmpassword')
 		{
-			$settingsData[$k] = $v;
+			$db->updateSettings($k, $v);
 		}
 	}
 
