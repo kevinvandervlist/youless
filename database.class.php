@@ -1,4 +1,4 @@
- <?php
+<?php
 
 class Database {
 
@@ -15,7 +15,6 @@ class Database {
    			));
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_db->query('SET CHARACTER SET utf8');
-            //$this->_db->query('SET SESSION group_concat_max_len=15360');
         } catch (PDOException $e) {
             exit('Error while connecting to database.'.$e->getMessage());
         }
@@ -63,7 +62,6 @@ class Database {
      */
     public function updateSettings($key, $value) {
         try {
-			//$sth = $this->_db->prepare("UPDATE settings SET `value` = ? WHERE `key` = ?");
 			$sth = $this->_db->prepare("INSERT INTO settings (`value`,`key`) VALUES (:value, :key) ON DUPLICATE KEY UPDATE `value`=:value, `key`=:key");
 			
 			$sth->bindValue(':value', $value, PDO::PARAM_STR);

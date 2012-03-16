@@ -27,6 +27,12 @@ CREATE TABLE IF NOT EXISTS `settings` (
   UNIQUE KEY `key` (`key`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+--
+-- Dumping data for table `settings`
+--
+
+INSERT INTO `settings` (`key`, `value`) VALUES
+('cpkwh', '0.22');
 
 -- --------------------------------------------------------
 
