@@ -30,6 +30,11 @@ table{
 	#loginForm input[type=submit]{
 		margin:40px 0 0 110px;
 	}
+	#invalidLogin{
+		height:16px;
+		color:red;
+		text-align:center;
+	}
 	
 #settingsOverlay{
 	position:absolute;
@@ -48,6 +53,12 @@ table{
 }
 	#settingsOverlay table{
 		margin:25px;
+	}
+	#version{
+		position:absolute;
+		bottom:10px;
+		right:10px;
+		font-size:8px;
 	}
 
 #topHeader{

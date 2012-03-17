@@ -14,7 +14,7 @@
 		<title>YouLess - Energy Monitor</title>
 		<link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico" />
 		<link type="text/css" href="css/style.css" rel="stylesheet" />
-		<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.18.custom.css" rel="stylesheet" />	
+		<link type="text/css" href="css/jquery-ui-1.8.18.custom.css" rel="stylesheet" />	
 		<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
 		<script type="text/javascript" src="js/jquery-ui-1.8.18.custom.min.js"></script>
 		<script type="text/javascript" src="js/highstock.src.js"></script>
@@ -42,6 +42,7 @@
 				</table>
 			</form>	
 
+			<div id="version">v1.0.1</div>
 		</div>
 		
 		<div id="topHeader">

@@ -16,7 +16,7 @@ if (isset($_POST['login']) && $_POST['login'] == 1) {
 }
 
 if (isset($_GET['logout']) && $_GET['logout'] == 1) {
-		$_SESSION['user_id'] = false;
+		unset($_SESSION['user_id']);
 }
 
 if (!$_SESSION['user_id']) {
