@@ -65,14 +65,15 @@
 				</ul>
 			</div>
 			
-			<div id="cpkwhCounter" class="counter chart day week month" style="display:none;"></div>
+			<div id="cpkwhCounter" class="counter chart day week month"></div>
 			<div id="wattCounter" class="counter chart live"></div>
 			<div id="kwhCounter" class="counter chart day week month" style="display:none;"></div>
 		</div>
 		<div id="container">
-			
-			<input type="text" id="datepicker" class="chart day week month" style="display:none;" value="<?php echo date("Y-m-d"); ?>">			
-			<div id="history" class="chart day week month" style="height: 500px; min-width: 500px;display:none;"></div>
+			<div id="datepickContainer" class="chart day week month">
+				<input type="text" id="datepicker" value="<?php echo date("Y-m-d"); ?>">			
+			</div>
+			<div id="history" class="chart day week month"></div>
 			<div id="live" class="chart live" style="height: 500px; min-width: 500px;"></div>
 
 		</div>

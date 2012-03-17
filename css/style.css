@@ -112,6 +112,7 @@ table{
 }
 	#cpkwhCounter{
 		position:absolute;
+		display:none;		
 		top:25px;
 		right:160px;
 		height:30px;
@@ -208,6 +209,22 @@ table{
 	padding:20px 10px;
 	background:white;
 }
+	#datepickContainer{
+		display:none;
+		height:25px;
+		width:162px;	
+		border:1px solid #e5e5e5;
+		background:url('../img/calendar.png') no-repeat 6px 3px #f1f1f1;	
+	}
+	#datepicker{
+		margin:4px 4px 4px 32px;
+		width:122px;
+	}
+	#history{
+		display:none;	
+		height: 500px; 
+		min-width: 500px;
+	}
 
 
 
@@ -269,7 +286,7 @@ textarea[name=meta_keywords]{
 }
 input[type=text], input[type=password]{
 	border:1px solid #d2d2d2;
-	margin:5px 0 0 35px;
+	margin:2px 0 2px 35px;
 }
 input[type=text]:focus, input[type=password]:focus{
 	border:1px solid #3079ED;
