@@ -24,53 +24,65 @@ if(isset($_SESSION['user_id']) && $_SESSION['user_id'] != false)
 		// Get data from specific day
 		$rows = $db->getSpecificDay($sqlDate);
 		
-		$i=0;
-		$kwh = 0;
-		
-		foreach($rows as $k)
+		if(count($rows) == 0)
 		{
-			$row = explode(",", $k->value);
-			$total = count($row);
+		
+			echo '{"ok": 0, "msg":"Geen data beschikbaar op deze datum"}';
+		
+		}
+		else
+		{
+		
+			$i=0;
+			$kwh = 0;
 			
-			$time = strtotime($k->time);
-			
-			$timeAr[$i][] = $time;
-			$dataAr[$i] = $row;
-			
-			for($t=1;$t<$total;$t++)
+			foreach($rows as $k)
 			{
-				$timeAr[$i][$t] = $timeAr[$i][$t-1] +  (int)$k->delta;
+				$row = explode(",", $k->value);
+				$total = count($row);
+				
+				$time = strtotime($k->time);
+				
+				$timeAr[$i][] = $time;
+				$dataAr[$i] = $row;
+				
+				for($t=1;$t<$total;$t++)
+				{
+					$timeAr[$i][$t] = $timeAr[$i][$t-1] +  (int)$k->delta;
+				}
+				$i++;
+				
+				// Calculate used kwh
+				foreach($row as $key => $val)
+				{
+					$kwh += ((int)str_replace("\"", "", $val) / 1000) / 60;
+				}	
 			}
-			$i++;
 			
-			// Calculate used kwh
-			foreach($row as $key => $val)
+			$timeStr = '';
+			foreach($timeAr as $k)
 			{
-				$kwh += ((int)str_replace("\"", "", $val) / 1000) / 60;
-			}	
+				$timeStr .= implode(",", $k);
+			}
+			
+			// Create JS data string
+			$i=0;
+			$dataStr = '';
+			
+			foreach($dataAr as $k)
+			{
+				$dataStr .= ($i!=0 ? "," : "").implode(",", $k);
+				$i++;
+			}
+			
+			// Calculate price
+			$price = $kwh * (float)$settings->cpkwh;	
+			
+			// Output data
+			echo '{"ok": 1, "kwh": "'. number_format($kwh, 2, ',', '') .'", "price": "'. number_format($price, 2, ',', '') .'", "start": "'. $sqlDate .'", "val": "'. str_replace("\"", "", $dataStr) .'"}';	
+		
 		}
-		
-		$timeStr = '';
-		foreach($timeAr as $k)
-		{
-			$timeStr .= implode(",", $k);
-		}
-		
-		// Create JS data string
-		$i=0;
-		$dataStr = '';
-		
-		foreach($dataAr as $k)
-		{
-			$dataStr .= ($i!=0 ? "," : "").implode(",", $k);
-			$i++;
-		}
-		
-		// Calculate price
-		$price = $kwh * (float)$settings->cpkwh;	
-		
-		// Output data
-		echo '{"kwh": "'. number_format($kwh, 2, ',', '') .'", "price": "'. number_format($price, 2, ',', '') .'", "start": "'. $sqlDate .'", "val": "'. str_replace("\"", "", $dataStr) .'"}';	
+			
 	}
 	elseif(isset($_GET['a']) && $_GET['a'] == 'week' && isset($_GET['date']))
 	{	
@@ -86,54 +98,64 @@ if(isset($_SESSION['user_id']) && $_SESSION['user_id'] != false)
 		
 		// Get data from specific week
 		$rows = $db->getSpecificRange($begin, $end);
-		
-		$i=0;
-		$kwh = 0;
-		
-		foreach($rows as $k)
+
+		if(count($rows) == 0)
 		{
-			$row = explode(",", $k->value);
-			$total = count($row);
+		
+			echo '{"ok": 0, "msg":"Geen data beschikbaar op deze datum"}';
+		
+		}
+		else
+		{
+				
+			$i=0;
+			$kwh = 0;
 			
-			$time = strtotime($k->time);
-			
-			$timeAr[$i][] = $time;
-			$dataAr[$i] = $row;
-			
-			for($t=1;$t<$total;$t++)
+			foreach($rows as $k)
 			{
-				$timeAr[$i][$t] = $timeAr[$i][$t-1] +  (int)$k->delta;
+				$row = explode(",", $k->value);
+				$total = count($row);
+				
+				$time = strtotime($k->time);
+				
+				$timeAr[$i][] = $time;
+				$dataAr[$i] = $row;
+				
+				for($t=1;$t<$total;$t++)
+				{
+					$timeAr[$i][$t] = $timeAr[$i][$t-1] +  (int)$k->delta;
+				}
+				$i++;
+				
+				// Calculate used kwh
+				foreach($row as $key => $val)
+				{
+					$kwh += ((int)str_replace("\"", "", $val) / 1000) / 60;
+				}	
 			}
-			$i++;
 			
-			// Calculate used kwh
-			foreach($row as $key => $val)
+			$timeStr = '';
+			foreach($timeAr as $k)
 			{
-				$kwh += ((int)str_replace("\"", "", $val) / 1000) / 60;
-			}	
+				$timeStr .= implode(",", $k);
+			}
+			
+			// Create JS data string
+			$i=0;
+			$dataStr = '';
+			
+			foreach($dataAr as $k)
+			{
+				$dataStr .= ($i!=0 ? "," : "").implode(",", $k);
+				$i++;
+			}
+			
+			// Calculate price
+			$price = $kwh * (float)$settings->cpkwh;
+			
+			// Output data
+			echo '{"kwh": "'. number_format($kwh, 2, ',', '') .'", "price": "'. number_format($price, 2, ',', '') .'", "start": "'. $begin .'", "val": "'. str_replace("\"", "", $dataStr) .'"}';	
 		}
-		
-		$timeStr = '';
-		foreach($timeAr as $k)
-		{
-			$timeStr .= implode(",", $k);
-		}
-		
-		// Create JS data string
-		$i=0;
-		$dataStr = '';
-		
-		foreach($dataAr as $k)
-		{
-			$dataStr .= ($i!=0 ? "," : "").implode(",", $k);
-			$i++;
-		}
-		
-		// Calculate price
-		$price = $kwh * (float)$settings->cpkwh;
-		
-		// Output data
-		echo '{"kwh": "'. number_format($kwh, 2, ',', '') .'", "price": "'. number_format($price, 2, ',', '') .'", "start": "'. $begin .'", "val": "'. str_replace("\"", "", $dataStr) .'"}';	
 	}
 	elseif(isset($_GET['a']) && $_GET['a'] == 'month' && isset($_GET['date']))
 	{	

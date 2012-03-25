@@ -7,7 +7,7 @@ class Request {
     
 	public function __construct() {
 		$this->source = 'http://'.YL_ADDRESS.'/';
-		$this->format = '?f=j'; // JSON
+		$this->format = '&f=j'; // JSON
 	}    
 
     /**

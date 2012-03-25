@@ -22,7 +22,13 @@
 		<script type="text/javascript" src="js/script.js"></script>
 	</head>
 	<body>
-		
+		<div id="overlay">
+			<div id="dialog">
+				<div id="message"></div>
+				<input type="button" id="closeDialog" value="Sluit"/>
+			</div>
+			<div id="overlayBack"></div>
+		</div>
 		<div id="settingsOverlay">
 
 			<form>
@@ -51,10 +57,7 @@
 		</div>
 		<div id="header">
 		
-			<div id="logo">
-				<span style="line-height:26px;float:left;"><span style="font-weight:bold;">YOU</span>LESS</span>
-				<span style="font-size:13px;line-height:13px;float:left;">ENERGY MONITOR</span>
-			</div>
+			<div id="logo"></div>
 		
 			<div id="menu">
 				<ul class="btn">

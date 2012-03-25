@@ -103,56 +103,66 @@ function createChart(target, date){
 				dataType: 'json',
 				success: function( jsonData ) {
 
-					// Format data
-					jsDate = jsonData["start"].split("-");
-					year = jsDate[0];
-					month = jsDate[1]-1;
-					day = jsDate[2]-0;
+					if(jsonData["ok"] == 0)
+					{
+						$('#message').text(jsonData["msg"]);
+						$('#overlay').fadeIn();
+						//console.log(jsonData["msg"]);
+					}
+					else
+					{
 					
-					
-					// KWH counter
-					//console.log(jsonData["kwh"]);
-					$('#kwhCounter').text(jsonData["kwh"]+" kWh");
-					
-					// Costs per kWh counter
-					$('#cpkwhCounter').text("€ "+jsonData["price"]);
-					
-					// Parse values to integers
-					data = jsonData["val"].split(",");
-					for(var i=0; i<data.length; i++) { data[i] = parseFloat(data[i], 10); } 
-					
-					// Create the chart
-					ajaxchart = new Highcharts.StockChart({
-						chart : {
-							renderTo : 'history',
-							type: type			
-						},			
-						rangeSelector : {
-							buttons: buttons						
-						},
-						credits: {
-							enabled: false
-						},
-						title : {
-							text : title
-						},				
-						navigator:{
-							enabled: navScroll
-						},									
-						scrollbar:{
-							enabled: navScroll
-						},						
-						series : [{
-							name : serieName,
-							data : data ,
-							pointStart: Date.UTC(year, month, day),
-			            	pointInterval: pointInterval,
-							tooltip: {
-								valueDecimals: 2
-							}
-						}]
-					});
-		
+						// Format data
+						jsDate = jsonData["start"].split("-");
+						year = jsDate[0];
+						month = jsDate[1]-1;
+						day = jsDate[2]-0;
+						
+						
+						// KWH counter
+						//console.log(jsonData["kwh"]);
+						$('#kwhCounter').text(jsonData["kwh"]+" kWh");
+						
+						// Costs per kWh counter
+						$('#cpkwhCounter').text("€ "+jsonData["price"]);
+						
+						// Parse values to integers
+						data = jsonData["val"].split(",");
+						for(var i=0; i<data.length; i++) { data[i] = parseFloat(data[i], 10); } 
+						
+						// Create the chart
+						ajaxchart = new Highcharts.StockChart({
+							chart : {
+								renderTo : 'history',
+								type: type			
+							},			
+							rangeSelector : {
+								buttons: buttons						
+							},
+							credits: {
+								enabled: false
+							},
+							title : {
+								text : title
+							},				
+							navigator:{
+								enabled: navScroll
+							},									
+							scrollbar:{
+								enabled: navScroll
+							},						
+							series : [{
+								name : serieName,
+								data : data ,
+								pointStart: Date.UTC(year, month, day),
+				            	pointInterval: pointInterval,
+								tooltip: {
+									valueDecimals: 2
+								}
+							}]
+						});
+						
+					}
 				},
     			cache: false
 			});
@@ -160,7 +170,11 @@ function createChart(target, date){
 
 			
 $(document).ready(function() {
-	
+
+	$('#closeDialog').click(function(){
+		$('#overlay').hide();
+	});
+		
 	// Settings
 	$('#showSettings').click(function(){
 		$('#settingsOverlay').slideDown();
@@ -258,6 +272,8 @@ $(document).ready(function() {
 		dateFormat: 'yy-mm-dd',
 		maxDate: new Date(),
 		showOn: 'focus',
+		//changeMonth: true,
+		//changeYear: true,		
 		monthNames: ['Januari', 'Februari', 'Maart', 'April', 'Mei', 'Juni', 'Juli', 'Augustus', 'September', 'Oktober', 'November', 'December'],
         monthNamesShort: ['jan', 'feb', 'maa', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'],
         dayNames: ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'],
