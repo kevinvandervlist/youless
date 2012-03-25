@@ -103,14 +103,12 @@ function createChart(target, date){
 				dataType: 'json',
 				success: function( jsonData ) {
 
+					// If invalid data give feedback
 					if(jsonData["ok"] == 0)
 					{
 						$('#message').text(jsonData["msg"]);
 						$('#overlay').fadeIn();
-						//console.log(jsonData["msg"]);
 					}
-					else
-					{
 					
 						// Format data
 						jsDate = jsonData["start"].split("-");
@@ -120,7 +118,6 @@ function createChart(target, date){
 						
 						
 						// KWH counter
-						//console.log(jsonData["kwh"]);
 						$('#kwhCounter').text(jsonData["kwh"]+" kWh");
 						
 						// Costs per kWh counter
@@ -162,7 +159,6 @@ function createChart(target, date){
 							}]
 						});
 						
-					}
 				},
     			cache: false
 			});

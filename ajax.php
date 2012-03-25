@@ -27,7 +27,7 @@ if(isset($_SESSION['user_id']) && $_SESSION['user_id'] != false)
 		if(count($rows) == 0)
 		{
 		
-			echo '{"ok": 0, "msg":"Geen data beschikbaar op deze datum"}';
+			echo '{"ok": 0, "msg":"Geen data beschikbaar op deze datum", "start": "'. $sqlDate .'", "val": " 0, 0", "kwh": 0, "price": 0}';
 		
 		}
 		else
@@ -102,7 +102,7 @@ if(isset($_SESSION['user_id']) && $_SESSION['user_id'] != false)
 		if(count($rows) == 0)
 		{
 		
-			echo '{"ok": 0, "msg":"Geen data beschikbaar op deze datum"}';
+			echo '{"ok": 0, "msg":"Geen data beschikbaar op deze datum", "start": "'. $begin .'", "val": " 0, 0", "kwh": 0, "price": 0}';
 		
 		}
 		else
