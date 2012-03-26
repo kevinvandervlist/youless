@@ -83,7 +83,12 @@
 
 	$errorMsg = '';
 	$ok = true;
-	
+
+	if (version_compare(PHP_VERSION, '5.2.0') <= 0) 
+	{
+		$errorMsg .= '<p class="error"><b>PHP 5.2.0</b> is vereist</p>';
+		$ok = false;
+	}	
 	if(!file_exists('settings.inc.php'))
 	{
 		$errorMsg .= '<p class="error"><b>settings.inc.php</b> ontbreekt, pas <b>settings.inc.php.example</b> aan en hernoem deze naar <b>settings.inc.php</b></p>';

@@ -48,7 +48,7 @@
 				</table>
 			</form>	
 
-			<div id="version">v1.0.1</div>
+			<div id="version">v1.1.1</div>
 		</div>
 		
 		<div id="topHeader">
