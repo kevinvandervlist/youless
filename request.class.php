@@ -43,32 +43,6 @@ class Request {
 	}    
 	
     /**
-     * Get last day
-     */
-	public function getLastDay() {
-		$part1 = json_decode($this->getHistoricalData('w',1), true);
-		$part2 = json_decode($this->getHistoricalData('w',2), true);
-		$part3 = json_decode($this->getHistoricalData('w',3), true);
-		
-		$values = array_merge($part3['val'], $part2['val'], $part1['val']);
-		
-		foreach($values as $k => $v){
-			if($v == NULL){
-				unset($values[$k]);
-			}
-			elseif($v == '*')
-			{
-				$values[$k] =' 0';
-			}
-		}
-		$val = implode('","', $values);
-		
-		$data = '{"un": "'. $part3['un'] .'","tm": "'. $part3['tm'] .'", "dt": '. $part3['dt'] .', "val": ["'. $val .'"]}'; 
-
-		return $data;
-	} 	
-	
-    /**
      * Get last hour
      */
 	public function getLastHour() {

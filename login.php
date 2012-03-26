@@ -28,10 +28,7 @@
 		<div id="topHeader"></div>
 		<div id="header">
 		
-			<div id="logo">
-				<span style="line-height:26px;float:left;"><span style="font-weight:bold;">YOU</span>LESS</span>
-				<span style="font-size:13px;line-height:13px;float:left;">ENERGY MONITOR</span>
-			</div>
+			<div id="logo"></div>
 					
 		</div>
 		<div id="container">
