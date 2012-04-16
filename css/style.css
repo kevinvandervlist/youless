@@ -155,24 +155,37 @@ table{
 		position:absolute;
 		display:none;		
 		top:25px;
-		right:160px;
+		right:190px;
 		height:30px;
 		width:70px;
-		line-height:30px;
-		text-align:right;
+		line-height:15px;
+		padding-left:40px;		
+		text-align:left;
 		background:url('../img/price.png') no-repeat 0 0;	
 	}
-	
-	.counter{
+	#wattCounter{
 		position:absolute;
 		top:25px;
-		right:30px;
+		right:70px;
 		height:30px;
 		width:100px;
 		line-height:30px;
 		text-align:right;
 		background:url('../img/kwh.png') no-repeat 0 0;
+	}			
+	#kwhCounter{
+		position:absolute;
+		top:25px;
+		right:30px;
+		height:30px;
+		width:100px;
+		padding-left:40px;
+		line-height:15px;
+		text-align:left;
+		vertical-align:middle;		
+		background:url('../img/kwh.png') no-repeat 0 0;
 	}
+		
 	.countUp{
 		color:red;
 	}
@@ -327,7 +340,7 @@ textarea[name=meta_keywords]{
 }
 input[type=text], input[type=password]{
 	border:1px solid #d2d2d2;
-	margin:2px 0 2px 35px;
+	margin:2px 0 2px 0px;
 }
 input[type=text]:focus, input[type=password]:focus{
 	border:1px solid #3079ED;

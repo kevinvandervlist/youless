@@ -179,6 +179,36 @@ class Database {
         } catch (PDOException $e) {
             $this->printErrorMessage($e->getMessage());
         }
+    }    
+    
+	/**
+	* Get kwh count
+	*/
+    public function getKwhCount($datetime) {
+        try {
+            $sth = $this->_db->prepare("
+			SELECT 
+				*,
+				if((SIGN(timestampdiff(second, inserted,:date)) = -1),
+				( ( (timestampdiff(second, inserted,:date))*(timestampdiff(second, inserted,:date)) ) / (-1*(timestampdiff(second, inserted,:date))) ),
+				(timestampdiff(second, inserted,:date)) ) as TimeDif
+			FROM 
+				kwh_h
+			WHERE 
+				inserted <= :date OR inserted > :date
+			ORDER BY 
+				TimeDif ASC 
+			LIMIT 1;");
+
+			$sth->bindValue(':date', $datetime, PDO::PARAM_STR);           			
+            $sth->setFetchMode(PDO::FETCH_ASSOC);
+            $sth->execute();
+            
+            $row = $sth->fetch(PDO::FETCH_OBJ);
+			return $row;
+        } catch (PDOException $e) {
+            $this->printErrorMessage($e->getMessage());
+        }
     }     
 	
    /**
@@ -207,6 +237,24 @@ class Database {
             $this->printErrorMessage($e->getMessage());
         }
     } 	
+    
+   /**
+    * Add hourly kwh (cronjob)
+    */ 
+    public function addHourlyKwh($kwh) {
+        try {
+            $sth = $this->_db->prepare("INSERT INTO kwh_h (
+            	kwh
+            ) VALUES (
+				?
+            )");
+
+            $sth->bindValue(1, $kwh, PDO::PARAM_STR);
+            $sth->execute();
+        } catch (PDOException $e) {
+            $this->printErrorMessage($e->getMessage());
+        }
+    }     
     
 }
 

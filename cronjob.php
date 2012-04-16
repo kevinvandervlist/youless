@@ -2,17 +2,25 @@
 <?php
 if (PHP_SAPI == "cli")
 {
-	include "settings.inc.php";
-	include "request.class.php";
-	include "database.class.php";
+	include "inc/settings.inc.php";
+	include "classes/curl.class.php";
+	include "classes/request.class.php";
+	include "classes/database.class.php";
 	
 	$request = new Request();
 	$db = new Database();
 	
-	$data = json_decode($request->getLastHour(), true);	
-	$values = '"'. implode('","', $data['val']) .'"';	
+	// Update data table
+	$data = $request->getLastHour();		
 	
-	$db->addHourlyData($data['tm'], $data['un'], $data['dt'], $values);
+	$db->addHourlyData($data['tm'], $data['un'], $data['dt'], '"'. $data['val'] .'"');
+	
+	// Update kwh count
+	$liveData = json_decode($request->getLiveData(), true);
+
+	$db->addHourlyKwh($liveData['cnt']);
+	
+	echo $data['tm']."\n";
 }
 else
 {

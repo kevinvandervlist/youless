@@ -1,12 +1,15 @@
 <?php
-include "settings.inc.php";
-include "request.class.php";	
-include "database.class.php";
+include "inc/settings.inc.php";
+include "classes/curl.class.php";
+include "classes/request.class.php";	
+include "classes/database.class.php";
+include "classes/generic.class.php";
 
 session_start();
 
 $request = new Request();
 $db = new Database();
+$gen = new Generic();
 $settings = $db->getSettings();
 
 if(isset($_SESSION['user_id']) && $_SESSION['user_id'] != false)
@@ -23,7 +26,7 @@ if(isset($_SESSION['user_id']) && $_SESSION['user_id'] != false)
 		
 		// Get data from specific day
 		$rows = $db->getSpecificDay($sqlDate);
-		
+				
 		if(count($rows) == 0)
 		{
 		
@@ -34,7 +37,6 @@ if(isset($_SESSION['user_id']) && $_SESSION['user_id'] != false)
 		{
 		
 			$i=0;
-			$kwh = 0;
 			
 			foreach($rows as $k)
 			{
@@ -51,12 +53,6 @@ if(isset($_SESSION['user_id']) && $_SESSION['user_id'] != false)
 					$timeAr[$i][$t] = $timeAr[$i][$t-1] +  (int)$k->delta;
 				}
 				$i++;
-				
-				// Calculate used kwh
-				foreach($row as $key => $val)
-				{
-					$kwh += ((int)str_replace("\"", "", $val) / 1000) / 60;
-				}	
 			}
 			
 			$timeStr = '';
@@ -73,17 +69,27 @@ if(isset($_SESSION['user_id']) && $_SESSION['user_id'] != false)
 			{
 				$dataStr .= ($i!=0 ? "," : "").implode(",", $k);
 				$i++;
-			}
-			
-			// Calculate price
-			$price = $kwh * (float)$settings->cpkwh;	
+			}	
 			
 			// Output data
-			echo '{"ok": 1, "kwh": "'. number_format($kwh, 2, ',', '') .'", "price": "'. number_format($price, 2, ',', '') .'", "start": "'. $sqlDate .'", "val": "'. str_replace("\"", "", $dataStr) .'"}';	
+			echo '{"ok": 1, "start": "'. $sqlDate .'", "val": "'. str_replace("\"", "", $dataStr) .'"}';	
 		
 		}
 			
 	}
+	elseif(isset($_GET['a']) && $_GET['a'] == 'calculate_day' && isset($_GET['date']))
+	{	
+		
+		$sqlDate = $_GET['date'];
+		
+		// Get data from specific day
+		$costs = $gen->calculateDayKwhCosts($sqlDate);	
+			
+		// Output data
+		echo '{"ok": 1, "kwh": "'. number_format($costs->kwh, 2, ',', '') .'", "kwhLow": "'. number_format($costs->kwhLow, 2, ',', '') .'", "price": "'. number_format($costs->price, 2, ',', '') .'", "priceLow": "'. number_format($costs->priceLow, 2, ',', '') .'"}';	
+		
+			
+	}	
 	elseif(isset($_GET['a']) && $_GET['a'] == 'week' && isset($_GET['date']))
 	{	
 		
@@ -93,9 +99,8 @@ if(isset($_SESSION['user_id']) && $_SESSION['user_id'] != false)
 		$year = date('Y',strtotime($sqlDate));
 	
 		$begin = date("Y-m-d", strtotime($year."W".$week));
-		$end = date("Y-m-d", strtotime($year."W".$week)+(6*86400));
-		
-		
+		$end = date("Y-m-d", strtotime($year."W".$week)+(6*86400));		
+				
 		// Get data from specific week
 		$rows = $db->getSpecificRange($begin, $end);
 
@@ -109,7 +114,6 @@ if(isset($_SESSION['user_id']) && $_SESSION['user_id'] != false)
 		{
 				
 			$i=0;
-			$kwh = 0;
 			
 			foreach($rows as $k)
 			{
@@ -127,11 +131,6 @@ if(isset($_SESSION['user_id']) && $_SESSION['user_id'] != false)
 				}
 				$i++;
 				
-				// Calculate used kwh
-				foreach($row as $key => $val)
-				{
-					$kwh += ((int)str_replace("\"", "", $val) / 1000) / 60;
-				}	
 			}
 			
 			$timeStr = '';
@@ -150,13 +149,27 @@ if(isset($_SESSION['user_id']) && $_SESSION['user_id'] != false)
 				$i++;
 			}
 			
-			// Calculate price
-			$price = $kwh * (float)$settings->cpkwh;
-			
 			// Output data
-			echo '{"kwh": "'. number_format($kwh, 2, ',', '') .'", "price": "'. number_format($price, 2, ',', '') .'", "start": "'. $begin .'", "val": "'. str_replace("\"", "", $dataStr) .'"}';	
+			echo '{"ok": 1, "start": "'. $begin .'", "val": "'. str_replace("\"", "", $dataStr) .'"}';	
 		}
 	}
+	elseif(isset($_GET['a']) && $_GET['a'] == 'calculate_week' && isset($_GET['date']))
+	{	
+		
+		$sqlDate = $_GET['date'];
+		
+		$week = date('W',strtotime($sqlDate));
+		$year = date('Y',strtotime($sqlDate));
+	
+		$start = date("Y-m-d", strtotime($year."W".$week));
+		$end = date("Y-m-d", strtotime($year."W".$week)+(6*86400));
+		
+		// Calculate totals/costs
+		$costs = $gen->calculateRangeKwhCosts($start, $end);
+		
+		// Output data
+		echo '{"ok": 1, "kwh": "'. number_format($costs->kwh, 2, ',', '') .'", "kwhLow": "'. number_format($costs->kwhLow, 2, ',', '') .'", "price": "'. number_format($costs->price, 2, ',', '') .'", "priceLow": "'. number_format($costs->priceLow, 2, ',', '') .'"}';	
+	}	
 	elseif(isset($_GET['a']) && $_GET['a'] == 'month' && isset($_GET['date']))
 	{	
 		
@@ -164,39 +177,70 @@ if(isset($_SESSION['user_id']) && $_SESSION['user_id'] != false)
 		
 		$month = date('m',strtotime($sqlDate));
 		
-		$json = json_decode($request->getSpecificMonth($month), true);	
+		$data = $request->getSpecificMonth($month);	
+		$values = explode('","', $data['val']);
 		
-		$kwh = 0;
-		
-		$begin = date("Y-m-d", strtotime($json['tm']));
-		foreach($json['val'] as $k => $v)
+		$begin = date("Y-m-d", strtotime($data['tm']));
+		foreach($values as $k => $v)
 		{
-			$json['val'][$k] = str_replace(",",".",$v);
-			$kwh = $kwh + (float)$json['val'][$k];
+			$v = str_replace('"', '', $v);
+			$values[$k] = str_replace(',','.',$v);
 		}
-		$dataStr = implode(",", $json['val']);
-		
-		// Calculate price
-		$price = $kwh * (float)$settings->cpkwh;
+		$dataStr = implode(',', $values);
 		
 		// Output data
-		echo '{"kwh": "'. number_format($kwh, 2, ',', '') .'", "price": "'. number_format($price, 2, ',', '') .'", "start": "'. $begin .'", "val": "'. $dataStr .'"}';	
-	}
+		echo '{"ok": 1, "start": "'. $begin .'", "val": "'. $dataStr .'"}';	
+	}	
+	elseif(isset($_GET['a']) && $_GET['a'] == 'calculate_month' && isset($_GET['date']))
+	{	
+		
+		$sqlDate = $_GET['date'];
+		
+		$month = date('m',strtotime($sqlDate));
+		
+		$start = date('Y-m',strtotime($sqlDate)).'-01';
+		$end = date('Y-m-d', strtotime('-1 second', strtotime('+1 month', strtotime($start))));
+				
+		// Calculate totals/costs
+		$costs = $gen->calculateRangeKwhCosts($start, $end);
+		
+		// Output data
+		echo '{"ok": 1, "kwh": "'. number_format($costs->kwh, 2, ',', '') .'", "kwhLow": "'. number_format($costs->kwhLow, 2, ',', '') .'", "price": "'. number_format($costs->price, 2, ',', '') .'", "priceLow": "'. number_format($costs->priceLow, 2, ',', '') .'"}';	
+	}	
 	elseif(isset($_GET['a']) && $_GET['a'] == 'saveSettings')
 	{
+	
+		$excludedFields = array(
+			'password',
+			'confirmpassword',
+			'cpkwhlow_start_hour',
+			'cpkwhlow_start_min',
+			'cpkwhlow_end_hour',
+			'cpkwhlow_end_min'
+		);
+		
 		foreach($_POST as $k => $v)
 		{
 			$$k = $v;
-			if($k != 'password' && $k != 'confirmpassword')
+			if(!in_array($k, $excludedFields))
 			{
 				$db->updateSettings($k, $v);
 			}
 		}
+		
+		$cpkwhlow_start = $cpkwhlow_start_hour.":".$cpkwhlow_start_min;
+		$cpkwhlow_end = $cpkwhlow_end_hour.":".$cpkwhlow_end_min;
+		
+		$db->updateSettings('cpkwhlow_start', $cpkwhlow_start);
+		$db->updateSettings('cpkwhlow_end', $cpkwhlow_end);
 	
 		if($password != "" && $confirmpassword != "" && $password == $confirmpassword)
 		{
 			$db->updateLogin(sha1($password));
 		}
+		
+		echo '{"ok": 1, "msg":"Instellingen succesvol opgeslagen"}';	
+		
 	}
 	else
 	{
