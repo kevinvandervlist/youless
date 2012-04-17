@@ -8,8 +8,8 @@
 	$gen = new Generic();
 	$settings = $db->getSettings();
 	
-	$startTime = explode(":", $settings->cpkwhlow_start);
-	$endTime = explode (":", $settings->cpkwhlow_end);
+	$startTime = explode(":", $settings['cpkwhlow_start']);
+	$endTime = explode (":", $settings['cpkwhlow_end']);
 	
 	$startSelect = $gen->timeSelector($startTime[0], $startTime[1], 'cpkwhlow_start');
 	$endSelect = $gen->timeSelector($endTime[0], $endTime[1], 'cpkwhlow_end');
@@ -20,7 +20,7 @@
 		'2000' => '2000',
 		'5000' => '5000'
 	);
-	$intervalSelect = $gen->selector('liveinterval', $settings->liveinterval, $intervalOptions);
+	$intervalSelect = $gen->selector('liveinterval', $settings['liveinterval'], $intervalOptions);
 
 ?>	
 <!DOCTYPE HTML>
@@ -45,20 +45,20 @@
 			</div>
 			<div id="overlayBack"></div>
 		</div>
-		<div id="settingsOverlay" data-dualcount="<?php echo $settings->dualcount; ?>" data-liveinterval="<?php echo $settings->liveinterval; ?>">
+		<div id="settingsOverlay" data-dualcount="<?php echo $settings['dualcount']; ?>" data-liveinterval="<?php echo $settings['liveinterval']; ?>">
 
 			<form>
 				<table>
 					<tr>
-						<td style="width:200px;">Meter type:</td><td>Enkel<input type="radio" name="dualcount" value="0" <?php echo ($settings->dualcount == 0 ? 'checked=checked' : '') ?>/> Dubbel<input type="radio" name="dualcount" value="1" <?php echo ($settings->dualcount == 1 ? 'checked=checked' : '') ?>/></td>
+						<td style="width:200px;">Meter type:</td><td>Enkel<input type="radio" name="dualcount" value="0" <?php echo ($settings['dualcount'] == 0 ? 'checked=checked' : '') ?>/> Dubbel<input type="radio" name="dualcount" value="1" <?php echo ($settings['dualcount'] == 1 ? 'checked=checked' : '') ?>/></td>
 					</tr>				
 					<tr>
-						<td>Prijs per kWh:</td><td><input type="text" name="cpkwh" value="<?php echo $settings->cpkwh; ?>"/></td>
+						<td>Prijs per kWh:</td><td><input type="text" name="cpkwh" value="<?php echo $settings['cpkwh']; ?>"/></td>
 					</tr>
-					<tr class="cpkwhlow" <?php echo ($settings->dualcount == 1 ? '' : 'style="display:none;"') ?>;>
-						<td>Prijs per kWh (laagtarief):</td><td><input type="text" name="cpkwh_low" value="<?php echo $settings->cpkwh_low; ?>"/></td>
+					<tr class="cpkwhlow" <?php echo ($settings['dualcount'] == 1 ? '' : 'style="display:none;"') ?>;>
+						<td>Prijs per kWh (laagtarief):</td><td><input type="text" name="cpkwh_low" value="<?php echo $settings['cpkwh_low']; ?>"/></td>
 					</tr>	
-					<tr class="cpkwhlow" <?php echo ($settings->dualcount == 1 ? '' : 'style="display:none;"') ?>;>
+					<tr class="cpkwhlow" <?php echo ($settings['dualcount'] == 1 ? '' : 'style="display:none;"') ?>;>
 						<td>Tijd laagtarief:</td><td><?php echo $startSelect; ?> tot <?php echo $endSelect; ?></td>
 					</tr>
 					<tr>
@@ -76,7 +76,7 @@
 				</table>
 			</form>	
 
-			<div id="version">v1.2.0</div>
+			<div id="version">v1.2.1</div>
 		</div>
 		
 		<div id="topHeader">

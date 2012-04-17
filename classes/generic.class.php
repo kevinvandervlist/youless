@@ -2,6 +2,7 @@
 
 class Generic {
 
+	
     /**
      * Create selector
      */
@@ -43,16 +44,22 @@ class Generic {
      public function calculateRangeKwhCosts($beginDate, $endDate){
      	 
 		$checkDate = $beginDate;  
-		
+		$data = array(
+			'kwh' => 0,
+			'kwhLow' => 0,
+			'price' => 0,
+			'priceLow' => 0
+		);
+			
 		while ($checkDate != $endDate) { 
 
 	
 			$dailyData = $this->calculateDayKwhCosts($checkDate); 
 			
-			$data->kwh += $dailyData->kwh;
-			$data->kwhLow += $dailyData->kwhLow;	
-			$data->price += $dailyData->price;
-			$data->priceLow += $dailyData->priceLow;			
+			$data['kwh'] += $dailyData['kwh'];
+			$data['kwhLow'] += $dailyData['kwhLow'];	
+			$data['price'] += $dailyData['price'];
+			$data['priceLow'] += $dailyData['priceLow'];			
 			
 			$checkDate = date ("Y-m-d", strtotime ("+1 day", strtotime($checkDate))); 
 			
@@ -70,16 +77,16 @@ class Generic {
      	$this->db = new Database();
      	$settings = $this->db->getSettings();
 	
-		if($settings->dualcount == 1)
+		if($settings['dualcount'] == 1)
 		{
 			$beginData = $this->db->getKwhCount($checkDate.' 00:00:00');
 			$endData = $this->db->getKwhCount($checkDate.' 23:59:00');
 			
-			$beginLowData = $this->db->getKwhCount($checkDate.' '.$settings->cpkwhlow_start.':00');
-			$endLowData = $this->db->getKwhCount($checkDate.' '.$settings->cpkwhlow_end.':00');			
+			$beginLowData = $this->db->getKwhCount($checkDate.' '.$settings['cpkwhlow_start'].':00');
+			$endLowData = $this->db->getKwhCount($checkDate.' '.$settings['cpkwhlow_end'].':00');			
 			
-			$timeStart = (int)str_replace(":","", $settings->cpkwhlow_start);
-			$timeEnd = (int)str_replace(":","", $settings->cpkwhlow_end);
+			$timeStart = (int)str_replace(":","", $settings['cpkwhlow_start']);
+			$timeEnd = (int)str_replace(":","", $settings['cpkwhlow_end']);
 						
 			if($timeStart > $timeEnd)
 			{
@@ -93,13 +100,15 @@ class Generic {
 			}
 			
 			// Calculate price
-			$price = $kwh * (float)$settings->cpkwh;
-			$priceLow = $kwhLow * (float)$settings->cpkwh_low;	
+			$price = $kwh * (float)$settings['cpkwh'];
+			$priceLow = $kwhLow * (float)$settings['cpkwh_low'];	
 			
-			$data->kwh = $kwh;
-			$data->kwhLow = $kwhLow;	
-			$data->price = $price;
-			$data->priceLow = $priceLow;				
+			$data = array();
+			
+			$data['kwh'] = $kwh;
+			$data['kwhLow'] = $kwhLow;	
+			$data['price'] = $price;
+			$data['priceLow'] = $priceLow;				
 		}
 		else
 		{
@@ -109,12 +118,14 @@ class Generic {
 			$kwh = str_replace(",",".", $endData->kwh) - str_replace(",",".", $beginData->kwh);
 			
 			// Calculate price
-			$price = $kwh * (float)$settings->cpkwh;;
+			$price = $kwh * (float)$settings['cpkwh'];
 			
-			$data->kwh = $kwh;
-			$data->kwhLow = 0;	
-			$data->price = $price;
-			$data->priceLow = 0;				
+			$data = array();
+			
+			$data['kwh'] = $kwh;
+			$data['kwhLow'] = 0;	
+			$data['price'] = $price;
+			$data['priceLow'] = 0;				
 		}   		
 		
 		return $data;		  

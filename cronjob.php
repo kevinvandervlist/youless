@@ -1,6 +1,6 @@
 #!/usr/bin/php
 <?php
-if (PHP_SAPI == "cli")
+if (PHP_SAPI == "cli" || strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
 {
 	include "inc/settings.inc.php";
 	include "classes/curl.class.php";

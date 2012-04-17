@@ -86,10 +86,10 @@ class Database {
 
             $rows = $sth->fetchAll(PDO::FETCH_ASSOC);
             
-            
+            $settings = array();
             foreach($rows as $k => $v)
             {
-            	$settings->$v['key'] = $v['value'];
+            	$settings[$v['key']] = $v['value'];
             }
             
             return $settings;
