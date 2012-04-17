@@ -132,7 +132,7 @@
 				  `inserted` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 				  PRIMARY KEY (`id`),
 				  KEY `inserted` (`inserted`)
-				) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;					
+				) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;					
 
 				CREATE TABLE IF NOT EXISTS `".DB_NAME."`. `settings` (
 				  `key` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
@@ -158,7 +158,7 @@
 				INSERT INTO `".DB_NAME."`. `users` (`id`, `username`, `password`) VALUES
 				(2, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997');														
 		    ");
-			if($succes == 1)
+			if($succes > 0)
 			{
 				echo "<p style='color:green;'>Installatie succesvol. Verwijder <b>install.php</b> en <b>update.php</b></p>";
 				echo "<p style='color:green;'>Default gebruikersnaam/wachtwoord is <b>admin</b>/<b>admin</b></p>";

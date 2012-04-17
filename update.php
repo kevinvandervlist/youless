@@ -106,9 +106,9 @@
 				  `inserted` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 				  PRIMARY KEY (`id`),
 				  KEY `inserted` (`inserted`)
-				) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;		    
+				) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;		    
 
-				INSERT INTO `".DB_NAME."`. `settings` (`key`, `value`) VALUES
+				INSERT IGNORE INTO `".DB_NAME."`. `settings` (`key`, `value`) VALUES
 				('cpkwh_low', '0.10'),
 				('dualcount', '0'),
 				('cpkwhlow_start', '21:00'),
@@ -117,10 +117,8 @@
 																	
 		    ");
 
-			if($succes > 0)
-			{
-				echo "<p style='color:green;'>Update succesvol. Verwijder <b>install.php</b> en <b>update.php</b></p>";
-			}
+			echo "<p style='color:green;'>Update succesvol. Verwijder <b>install.php</b> en <b>update.php</b></p>";
+
 		} catch (PDOException $e) {
 		    die(print("<p class='error'>Database error: ". $e->getMessage() ."</p>"));
 		}		
