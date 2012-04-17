@@ -76,7 +76,7 @@
 				</table>
 			</form>	
 
-			<div id="version">v1.2.1</div>
+			<div id="version">v1.2.2</div>
 		</div>
 		
 		<div id="topHeader">
