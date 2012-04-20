@@ -20,7 +20,9 @@ if (PHP_SAPI == "cli")
 
 	$db->addHourlyKwh($liveData['cnt']);
 	
-	echo $data['tm']."\n";
+	var_dump($data);
+	echo "\n";
+
 }
 else
 {

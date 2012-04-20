@@ -96,6 +96,8 @@ class Request {
 		$curl->addSession( $this->source.'V?h=2'.$this->format, $this->opts );
 
 		$result = $curl->exec();
+		$info = $curl->info();
+		$error = $curl->error();
 		$curl->clear();	
 		
 		// Check for password and delete cookie
@@ -121,6 +123,9 @@ class Request {
 		$data['tm'] = $part2['tm'];
 		$data['dt'] = $part2['dt'];
 		$data['val'] = $val;
+		
+		$data['info'] = $info;
+		$data['error'] = $error;
 		
 		return $data;
 	} 		 
