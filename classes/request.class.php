@@ -17,7 +17,9 @@ class Request {
 		$this->password = YL_PASSWORD;
 		$this->opts = array( 
 			CURLOPT_RETURNTRANSFER => true, 
-			CURLOPT_FOLLOWLOCATION => false  
+			CURLOPT_FOLLOWLOCATION => false,
+			CURLOPT_CONNECTTIMEOUT => 5,
+			CURLOPT_TIMEOUT => 10
 		);	
 	}       
       
