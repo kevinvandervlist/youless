@@ -114,7 +114,7 @@
 		    $db = new PDO("mysql:host=".DB_HOST, DB_USER, DB_PASS);
 		    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
 		
-		    $succes = $db->exec("CREATE DATABASE `".DB_NAME."`;
+		    $succes = $db->exec("CREATE DATABASE IF NOT EXISTS `".DB_NAME."`;
 				CREATE TABLE IF NOT EXISTS `".DB_NAME."`. `data_h` (
 				  `id` int(11) NOT NULL AUTO_INCREMENT,
 				  `time` datetime NOT NULL,
