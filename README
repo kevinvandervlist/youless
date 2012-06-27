@@ -1,0 +1,36 @@
+Monitor youless data on your own server. 
+
+Useful if you don't want to use (or trust) providers like bidgely.
+
+Original git repo can be found at:
+https://bitbucket.org/magic_monkey/youless.git
+And the site:
+http://code.magicmonkey.nl/youless/wiki/Home
+
+Features
+Huidige versie: v1.2.2
+
+- Live weergave
+- Dag weegave
+- Week weergave
+- Maand weergave
+- Scheiding hoog/laag tarief
+- Scheiding hoog/laag verbruik
+- Screenshots
+   
+Download:
+$ git clone https://bitbucket.org/magic_monkey/youless.git
+Of: http://code.magicmonkey.nl/youless/get/v1.2.2.zip
+
+Eisen
+- MySQL DB
+- PHP 5.2
+- PHP curl extension
+- PHP pdo_mysql extension
+
+Setup
+- Pas 'settings.inc.php.example' aan en hernoem het naar 'settings.inc.php' (in de map 'inc')
+- Nieuwe setup: roep 'intall.php' aan.
+- Bestaande setup/database: roep 'update.php' aan
+- Voeg een uurlijkse cronjob toe die 'cronjob.php' aanroept
+- Default username/password is admin/admin
