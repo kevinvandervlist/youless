@@ -3,6 +3,8 @@
 	include "classes/database.class.php";
 	include "classes/generic.class.php";	
 	include "inc/session.inc.php";
+
+	$version = 'v1.2.2';
 		
 	$db = new Database();
 	$gen = new Generic();
@@ -13,6 +15,8 @@
 	
 	$startSelect = $gen->timeSelector($startTime[0], $startTime[1], 'cpkwhlow_start');
 	$endSelect = $gen->timeSelector($endTime[0], $endTime[1], 'cpkwhlow_end');
+
+	$username = $db->getUsername($_SESSION['user_id']);
 
 	$intervalOptions = array(
 		'500' => '500',
@@ -65,10 +69,14 @@
 						<td>Update interval live weergave:</td><td><?php echo $intervalSelect; ?> ms</td>
 					</tr>															
 					<tr>
-						<td>Admin wachtwoord:</td><td><input type="password" name="password" value=""/></td>
+						<td><?php echo $username; ?>'s wachtwoord:</td><td><input type="password" name="password" value=""/></td>
 					</tr>
 					<tr>
-						<td>Bevestig admin wachtwoord:</td><td><input type="password" name="confirmpassword" value=""/></td>
+						<td>Bevestig <?php echo $username; ?>'s wachtwoord:</td><td><input type="password" name="confirmpassword" value=""/></td>
+					</tr>										
+						<td>Voeg een gebruiker toe:</td><td><input type="text" name="newuser" value=""/></td>
+					</tr>										
+						<td>Met het wachtwoord:</td><td><input type="password" name="newuserpassword" value=""/></td>
 					</tr>										
 					<tr>
 						<td><input type="submit" id="saveSettings" value="Opslaan"/></td><td><input type="button" id="hideSettings" value="Sluit"/></td>
@@ -76,7 +84,7 @@
 				</table>
 			</form>	
 
-			<div id="version">v1.2.2</div>
+			<div id="version"><?php echo $version; ?></div>
 		</div>
 		
 		<div id="topHeader">

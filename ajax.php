@@ -213,6 +213,8 @@ if(isset($_SESSION['user_id']) && $_SESSION['user_id'] != false)
 		$excludedFields = array(
 			'password',
 			'confirmpassword',
+			'newuser',
+			'newuserpassword',
 			'cpkwhlow_start_hour',
 			'cpkwhlow_start_min',
 			'cpkwhlow_end_hour',
@@ -237,6 +239,11 @@ if(isset($_SESSION['user_id']) && $_SESSION['user_id'] != false)
 		if($password != "" && $confirmpassword != "" && $password == $confirmpassword)
 		{
 			$db->updateLogin(sha1($password));
+		}
+
+		if($newuser != "" && $newuserpassword != "")
+		{
+			$db->addLogin($newuser, sha1($newuserpassword));
 		}
 		
 		echo '{"ok": 1, "msg":"Instellingen succesvol opgeslagen"}';	

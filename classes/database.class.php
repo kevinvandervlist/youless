@@ -42,6 +42,23 @@ class Database {
     }
 
     /**
+     * Get username from id
+     */
+     public function getUsername($id) {
+        try {
+            $sth = $this->_db->prepare("SELECT username FROM users WHERE id= ?");
+
+            $sth->bindValue(1, $id, PDO::PARAM_STR);
+            $sth->execute();
+            $row = $sth->fetch(PDO::FETCH_OBJ);
+			return $row->username;
+        } catch (PDOException $e) {
+            $this->printErrorMessage($e->getMessage());
+        }
+    }
+
+
+    /**
      * Update login 
      */
      public function updateLogin($password) {
@@ -56,6 +73,24 @@ class Database {
             $this->printErrorMessage($e->getMessage());
         }
     }
+
+    /**
+     * Add a login
+     */
+    public function addLogin($username, $password) {
+        try {
+			$sth = $this->_db->prepare("INSERT INTO users (`username`, `password`) VALUES (:username, :password)");
+			
+			$sth->bindValue(':username', $username, PDO::PARAM_STR);
+			$sth->bindValue(':password', $password, PDO::PARAM_STR);			
+            $sth->execute();
+            
+			return $sth->rowCount();
+       } catch (PDOException $e) {
+            $this->printErrorMessage($e->getMessage());
+        }
+    }    
+
     
 	/**
      * Update settings
