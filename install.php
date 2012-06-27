@@ -163,7 +163,7 @@
 				$db = new Database();
 				$db->addLogin("admin", $hash->generatePasswordHash("admin", "admin"));
 
-				echo "<p style='color:green;'>Installatie succesvol. Verwijder <b>install.php</b> en <b>update.php</b></p>";
+				echo "<p style='color:green;'>Installatie succesvol. Verwijder <b>install.php</b>, <b>update.php</b> en <b>fix_hashes.php</b></p>";
 				echo "<p style='color:green;'>Default gebruikersnaam/wachtwoord is <b>admin</b>/<b>admin</b></p>";
 			}
 		} catch (PDOException $e) {

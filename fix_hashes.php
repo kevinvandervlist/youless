@@ -78,51 +78,37 @@
 		</div>
 		<div id="container">
 			<div id="installDiv">
-		
 <?php
+// Drop the users table, and create a new default admin user. 
+// New users can be created after the user has logged in.
+include 'inc/settings.inc.php';
+include "classes/hash.class.php";
+include "classes/database.class.php";
 
-	$errorMsg = '';
-	$ok = true;
-	
-	if(!file_exists('inc/settings.inc.php'))
-	{
-		$errorMsg .= '<p class="error"><b>settings.inc.php</b> ontbreekt, pas <b>settings.inc.php.example</b> aan en hernoem deze naar <b>settings.inc.php</b></p>';
-		$ok = false;
-	}
-	
-	echo $errorMsg;
-	if($ok)
-	{
-		include 'inc/settings.inc.php';
+$hash = new Hash();
+$dbu = new Database();
+
+try {
+	$db = new PDO("mysql:host=".DB_HOST.';dbname='.DB_NAME, DB_USER, DB_PASS);
+	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
 		
-		try {
-		    $db = new PDO("mysql:host=".DB_HOST, DB_USER, DB_PASS);
-		    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
-		
-		    $succes = $db->exec("
-				CREATE TABLE IF NOT EXISTS `".DB_NAME."`. `kwh_h` (
+	$succes = $db->exec("DROP TABLE users;
+				CREATE TABLE IF NOT EXISTS `".DB_NAME."`. `users` (
 				  `id` int(11) NOT NULL AUTO_INCREMENT,
-				  `kwh` varchar(20) NOT NULL,
-				  `inserted` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-				  PRIMARY KEY (`id`),
-				  KEY `inserted` (`inserted`)
-				) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;		    
-
-				INSERT IGNORE INTO `".DB_NAME."`. `settings` (`key`, `value`) VALUES
-				('cpkwh_low', '0.10'),
-				('dualcount', '0'),
-				('cpkwhlow_start', '21:00'),
-				('cpkwhlow_end', '07:00'),
-				('liveinterval', '1000');
-																	
+				  `username` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+				  `password` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+				  PRIMARY KEY (`id`)
+				) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1;
+				
 		    ");
 
-			echo "<p style='color:green;'>Update succesvol. Verwijder <b>install.php</b>, <b>update.php en <b>fix_hashes.php</b></b></p>";
+	$dbu->addLogin("admin", $hash->generatePasswordHash("admin", "admin"));
+	echo "<p style='color:green;'>Installatie succesvol. Verwijder <b>install.php</b>, <b>update.php</b> en <b>fix_hashes.php</b></p>";
+	echo "<p style='color:green;'>Default gebruikersnaam/wachtwoord is <b>admin</b>/<b>admin</b></p>";
 
-		} catch (PDOException $e) {
-		    die(print("<p class='error'>Database error: ". $e->getMessage() ."</p>"));
-		}		
-	}
+} catch (PDOException $e) {
+	die(print("<p class='error'>Database error: ". $e->getMessage() ."</p>"));
+	}		
 ?>
 			</div>
 		</div>

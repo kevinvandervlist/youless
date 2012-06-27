@@ -7,6 +7,14 @@ https://bitbucket.org/magic_monkey/youless.git
 And the site:
 http://code.magicmonkey.nl/youless/wiki/Home
 
+Note: When you want to use this version, run fix_hashes.php after the git clone.
+This DROPS the users table, but does NOT touch any other columns. 
+After the drop, it recreates it with a default user again (admin/admin), so you can log on again.
+
+After logging in, users can be added and passwords can be changed in the settings dialogue.
+
+-- Original README BELOW --
+
 Features
 Huidige versie: v1.2.2
 
