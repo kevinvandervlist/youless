@@ -80,7 +80,6 @@
 			<div id="installDiv">
 		
 <?php
-
 	$errorMsg = '';
 	$ok = true;
 
@@ -109,6 +108,8 @@
 	if($ok)
 	{
 		include 'inc/settings.inc.php';
+		include "classes/hash.class.php";
+		include "classes/database.class.php";
 		
 		try {
 		    $db = new PDO("mysql:host=".DB_HOST, DB_USER, DB_PASS);
@@ -155,11 +156,13 @@
 				  PRIMARY KEY (`id`)
 				) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1;
 				
-				INSERT INTO `".DB_NAME."`. `users` (`id`, `username`, `password`) VALUES
-				(2, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997');														
 		    ");
 			if($succes > 0)
 			{
+				$hash = new Hash();
+				$db = new Database();
+				$db->addLogin("admin", $hash->generatePasswordHash("admin", "admin"));
+
 				echo "<p style='color:green;'>Installatie succesvol. Verwijder <b>install.php</b> en <b>update.php</b></p>";
 				echo "<p style='color:green;'>Default gebruikersnaam/wachtwoord is <b>admin</b>/<b>admin</b></p>";
 			}

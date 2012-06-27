@@ -4,13 +4,16 @@ include "classes/curl.class.php";
 include "classes/request.class.php";	
 include "classes/database.class.php";
 include "classes/generic.class.php";
+include "classes/hash.class.php";
 
 session_start();
 
 $request = new Request();
+$hash = new Hash();
 $db = new Database();
 $gen = new Generic();
 $settings = $db->getSettings();
+$username = $db->getUsername($_SESSION['user_id']);
 
 if(isset($_SESSION['user_id']) && $_SESSION['user_id'] != false)
 {
@@ -238,12 +241,12 @@ if(isset($_SESSION['user_id']) && $_SESSION['user_id'] != false)
 	
 		if($password != "" && $confirmpassword != "" && $password == $confirmpassword)
 		{
-			$db->updateLogin(sha1($password));
+			$db->updateLogin($username, $hash->generatePasswordHash($username, $confirmpassword));
 		}
 
 		if($newuser != "" && $newuserpassword != "")
 		{
-			$db->addLogin($newuser, sha1($newuserpassword));
+			$db->addLogin($newuser, $hash->generatePasswordHash($newuser, $newuserpassword));
 		}
 		
 		echo '{"ok": 1, "msg":"Instellingen succesvol opgeslagen"}';	

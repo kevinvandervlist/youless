@@ -61,11 +61,12 @@ class Database {
     /**
      * Update login 
      */
-     public function updateLogin($password) {
+     public function updateLogin($username, $password) {
         try {
-            $sth = $this->_db->prepare("UPDATE users SET password= ? WHERE username='admin'");
+            $sth = $this->_db->prepare("UPDATE users SET password= ? WHERE username= ?");
 
             $sth->bindValue(1, $password, PDO::PARAM_STR);
+            $sth->bindValue(2, $username, PDO::PARAM_STR);
             $sth->execute();
 
 			return $sth->rowCount();
