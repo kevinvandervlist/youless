@@ -13,6 +13,8 @@ After the drop, it recreates it with a default user again (admin/admin), so you 
 
 After logging in, users can be added and passwords can be changed in the settings dialogue.
 
+If this script is used with MySQL 4.x, see http://gathering.tweakers.net/forum/list_message/38845187#38845187
+
 -- Original README BELOW --
 
 Features
