@@ -28,7 +28,8 @@ class Request {
      * Get live data
      */
 	public function getLiveData() {
-	
+		$this->setCurlSession();
+
 		$curl = new Curl();
 		
 		$curl->addSession( $this->source.'a'.$this->format, $this->opts );
